@@ -78,7 +78,7 @@ func main() {
 		if respostaConfirmacao == "s" {
 			intVar, _ := strconv.Atoi(qnt)
 			clientes = append(clientes, cliente{
-				nomeComprador:      nome,
+				nomeComprador:      nome[:len(nome)-1],
 				quantidadeBilhetes: intVar,
 			})
 		} else {
