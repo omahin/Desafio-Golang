@@ -1,12 +1,15 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strconv"
 )
 
 type cliente struct {
 	nomeComprador      string
-	quantidadeBilhetes uint
+	quantidadeBilhetes int
 }
 
 func printFormattedString(compras []cliente, precoIngresso float32, precoTotal float32) {
@@ -34,20 +37,33 @@ func main() {
 	// Variáveis
 	const valorBilhete = 10.50
 
-	var structCliente = cliente{}
+	//var structCliente = cliente{}
+
+	var nome string
+	var qnt string
+
 	var respostaConfirmacao string
 	var respostaContinuarCompra string
 	var valorTotal float32
 	var clientes = []cliente{}
 
+	in := bufio.NewReader(os.Stdin)
+
 	for {
 		// Pergunta 1
 		fmt.Printf("Qual o seu nome ? ")
-		fmt.Scanln(&structCliente.nomeComprador)
+		nome, _ = in.ReadString('\n')
 
 		// Pergunta 2
-		fmt.Printf("Quantos bilhetes você deseja comprar? ")
-		fmt.Scanln(&structCliente.quantidadeBilhetes)
+		for {
+			fmt.Printf("Quantos bilhetes você deseja comprar? ")
+			fmt.Scanln(&qnt)
+			if _, err := strconv.Atoi(qnt); err == nil {
+				break
+			} else {
+				fmt.Printf("Digite um número\n")
+			}
+		}
 
 		for {
 			fmt.Printf("Você deseja confirmar a compra? (s/n): ")
@@ -60,7 +76,11 @@ func main() {
 		}
 
 		if respostaConfirmacao == "s" {
-			clientes = append(clientes, structCliente)
+			intVar, _ := strconv.Atoi(qnt)
+			clientes = append(clientes, cliente{
+				nomeComprador:      nome,
+				quantidadeBilhetes: intVar,
+			})
 		} else {
 			continue
 		}
@@ -82,5 +102,4 @@ func main() {
 	}
 
 	printFormattedString(clientes, valorBilhete, valorTotal)
-	print(clientes)
 }
